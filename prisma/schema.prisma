@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+}
+
+model Shipment {
+  id            String         @id @default(uuid())
+  trackingCode  String         @unique
+  receiverName  String
+  destination   String
+  status        ShipmentStatus @default(PENDING)
+  createdAt     DateTime       @default(now())
+}
+
+enum Role {
+  ADMIN
+}
+
+enum ShipmentStatus {
+  PENDING
+  IN_TRANSIT
+  CUSTOMS
+  OUT_FOR_DELIVERY
+  DELIVERED
+}
